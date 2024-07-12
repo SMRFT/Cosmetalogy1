@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState,useEffect } from 'react';
 import { useLocation } from 'react-router-dom';
 import { Col, Row, Form, Tab, Nav } from 'react-bootstrap';
 import styled from 'styled-components';
@@ -11,24 +11,46 @@ import female from './images/female.png';
 import { BsPatchPlusFill } from "react-icons/bs";
 import { MdDelete } from "react-icons/md";
 import axios from 'axios';
+import { createGlobalStyle } from 'styled-components';
+export const GlobalStyle = createGlobalStyle`
+  body {
+    background-color: #e8f5e9; /* Light green background */
+    margin: 0;
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+  }
+`;
 
-const SectionTitle = styled.h4`
+export const AppContainer = styled.div`
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 20px;
+  background-color: #e8f5e9; /* Light green background */
+  min-height: 100vh; /* Ensure it covers the full height */
+`;
+
+export const SectionTitle = styled.h4`
   margin-top: 20px;
   text-align: center;
 `;
 
-const PatientDetailsContainer = styled.div`
+export const PatientDetailsContainer = styled.div`
   display: flex;
   flex-direction: column;
   align-items: center;
-  background-color: #f7f7f7;
+  background-color: #e8f5e9; /* Light green background */
   padding: 20px;
+  width: 300px; /* Set a fixed width for the container */
   height: auto;
   margin: 0;
   position: absolute;
+  top: 3;
+  left: 0;
+  bottom: 3;
+  margin-bottom: 100px; /* Adjust margin bottom as needed */
 `;
 
-const ProfileImage = styled.img`
+export const ProfileImage = styled.img`
   width: 100px;
   height: 100px;
   border-radius: 50%;
@@ -36,7 +58,7 @@ const ProfileImage = styled.img`
   margin-bottom: 20px;
 `;
 
-const PatientName = styled.h5`
+export const PatientName = styled.h5`
   margin: 0;
   font-weight: bold;
   margin-bottom: 10px;
@@ -44,14 +66,21 @@ const PatientName = styled.h5`
   width: 100%;
 `;
 
-const PatientText = styled.p`
+export const PatientText = styled.p`
   margin: 0;
   color: gray;
   text-align: left;
   width: 100%;
 `;
 
-const CenteredFormGroup = styled(Form.Group)`
+export const RightContent = styled.div`
+  margin-left: 320px; /* Make space for the fixed left container */
+  padding: 20px;
+  overflow-y: auto; /* Allow vertical scrolling */
+  height: 100vh; /* Full height of viewport */
+`;
+
+export const CenteredFormGroup = styled(Form.Group)`
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -61,91 +90,149 @@ const CenteredFormGroup = styled(Form.Group)`
 const SummaryDetailsContainer = styled.div`
   display: flex;
   flex-direction: column;
-  align-items: center;
-  margin-top: 20px;
-  text-align: center;
-`;
-
-const SummaryItem = styled.p`
-  margin: 0;
-  text-align: center;
-`;
-
-const DiagnosisContainer = styled.div`
+  align-items: flex-start;
   margin-top: 20px;
   padding: 20px;
-  background-color: #f1f1f1;
+  background-color: #ffffff;
   border-radius: 10px;
-  width: 30%;
-  height: 30%;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  width: 100%;
+  max-width: 800px;
+  margin: 0 auto;
 `;
 
-const ComplaintsContainer = styled.div`
-  margin-top: 50px;
-  padding: 20px;
-  background-color: #f1f1f1;
-  border-radius: 10px;
-  width: 30%;
-  height: 30%;
+const SummaryTitle = styled.h3`
+  text-align: center;
+  width: 100%;
+  margin-bottom: 20px;
 `;
 
-const FindingsContainer = styled.div`
-  margin-top: 50px;
-  padding: 20px;
-  background-color: #f1f1f1;
-  border-radius: 10px;
-  width: 30%;
-  height: 30%;
+const SummaryTable = styled.table`
+  width: 100%;
+  border-collapse: collapse;
+  margin-bottom: 20px;
+
+  th, td {
+    border: 1px solid #ddd;
+    padding: 8px;
+    text-align: left;
+  }
+
+  th {
+    background-color: #f2f2f2;
+  }
+
+  tr:nth-child(even) {
+    background-color: #f9f9f9;
+  }
 `;
 
-const PrescriptionContainer = styled.div`
+const SummaryItemTitle = styled.h4`
+  margin-top: 20px;
+  margin-bottom: 10px;
+`;
+
+const PatientDetailsRow = styled.div`
+  display: flex;
+  justify-content: space-between;
+  width: 100%;
+  margin-bottom: 10px;
+  line-height: 1.6;
+`;
+
+const PatientDetailsColumn = styled.div`
+  flex: 1;
+  &:first-child {
+    margin-right: 20px;
+  }
+`;
+
+const Divider = styled.hr`
+  width: 100%;
+  margin: 10px 0;
+  border: 1px solid #ddd;
+`;
+
+export const ContainerRow = styled.div`
+  display: flex;
+  justify-content: center;
+  margin-top: 20px;
+`;
+
+export const DiagnosisContainer = styled.div`
+  flex: 1;
+  margin-right: 10px;
+  padding: 20px;
+  background-color: #c8e6c9; /* Medium green background */
+  border-radius: 10px;
+`;
+
+export const ComplaintsContainer = styled.div`
+  flex: 1;
+  margin-right: 10px;
+  padding: 20px;
+  background-color: #c8e6c9; /* Medium green background */
+  border-radius: 10px;
+`;
+
+export const FindingsContainer = styled.div`
+  flex: 1;
+  padding: 20px;
+  background-color: #c8e6c9; /* Medium green background */
+  border-radius: 10px;
+`;
+
+export const PrescriptionContainer = styled.div`
   margin-top: 50px;
   padding: 20px;
-  background-color: #f1f1f1;
+  background-color: #a5d6a7; /* Darker green background */
   border-radius: 10px;
   width: 100%;
   height: 30%;
 `;
 
-const FlexContainer = styled.div`
+export const FlexContainer = styled.div`
   display: flex;
   align-items: center;
 `;
 
-const PlanContainer = styled.div`
+export const PlanContainer = styled.div`
   margin-top: 20px;
   padding: 20px;
-  background-color: #f1f1f1;
+  background-color: #c8e6c9; /* Medium green background */
   border-radius: 10px;
   width: 70%;
   margin-left: auto;
   margin-right: auto;
 `;
-const ProcedureContainer = styled.div`
+
+export const ProcedureContainer = styled.div`
   margin-top: 20px;
   padding: 20px;
-  background-color: #f1f1f1;
+  background-color: #c8e6c9; /* Medium green background */
   border-radius: 10px;
   width: 70%;
   margin-left: auto;
   margin-right: auto;
 `;
-const TestContainer = styled.div`
+
+export const TestContainer = styled.div`
   margin-top: 20px;
   padding: 20px;
-  background-color: #f1f1f1;
+  background-color: #c8e6c9; /* Medium green background */
   border-radius: 10px;
   width: 70%;
   margin-left: auto;
   margin-right: auto;
 `;
-const SummaryContainer = styled.div`
+
+export const SummaryContainer = styled.div`
   margin-top: 20px;
   padding: 20px;
-  background-color: #f1f1f1;
+  background-color: #e0f2f1; /* Lightest green background */
   border-radius: 10px;
   width: 50%;
-  height:auto;
+  height: auto;
   margin-left: auto;
   margin-right: auto;
 `;
@@ -171,9 +258,27 @@ const PrescriptionDetails = () => {
     plan2: '',
     plan3: ''
   });
-
+  
   const [selectedTests, setSelectedTests] = useState([]);
 
+
+
+  const [medicineOptions, setMedicineOptions] = useState([]); // State to hold medicine_name options
+
+  useEffect(() => {
+    // Fetch medicine_name options from API
+    axios.get('http://127.0.0.1:8000/pharmacy/data/')
+      .then(response => {
+        const medicineNames = response.data.map(medicine => ({
+          label: medicine.medicine_name
+        }));
+        setMedicineOptions(medicineNames);
+      })
+      .catch(error => {
+        console.error('Error fetching medicine names:', error);
+      });
+  }, []); // Empty dependency array ensures this effect runs once on component mount
+  
   const handleAddRow = () => {
     const newRow = { id: procedureRows.length + 1, value: '' };
     setProcedureRows([...procedureRows, newRow]);
@@ -214,6 +319,7 @@ const PrescriptionDetails = () => {
   
   const handleSubmit = async () => {
     const summaryData = {
+        patient_name: appointment.patientName,  // Include patient name here
         diagnosis: diagnosisInputs.map(input => input.selectedDiagnosis?.map(d => d.label).join(', ') || 'None').join('\n'),
         complaints: complaintsInputs.map(input => input.selectedComplaints?.map(c => c.label).join(', ') || 'None').join('\n'),
         findings: findingsInputs.map(input => input.selectedFindings?.map(f => f.label).join(', ') || 'None').join('\n'),
@@ -223,6 +329,7 @@ const PrescriptionDetails = () => {
         }).join('\n'),
         plans: `Plan1: ${planDetails.plan1 || 'None'}\nPlan2: ${planDetails.plan2 || 'None'}\nPlan3: ${planDetails.plan3 || 'None'}`,
         tests: selectedTests.map(test => test.label).join(', ') || 'None',
+        procedures: procedureRows.map(row => row.value).join('\n') || 'None',
     };
 
     try {
@@ -233,68 +340,184 @@ const PrescriptionDetails = () => {
     }
 };
 
-  
-  const getSummaryDetails = () => {
-    const diagnosis = diagnosisInputs.map((input, index) =>
-      `${index + 1}. ${input.selectedDiagnosis?.map(d => d.label).join(', ') || 'None'}`
-    ).join('\n') || 'None';
-  
-    const complaints = complaintsInputs.map((input, index) =>
-      `${index + 1}. ${input.selectedComplaints?.map(c => c.label).join(', ') || 'None'}`
-    ).join('\n') || 'None';
-  
-    const findings = findingsInputs.map((input, index) =>
-      `${index + 1}. ${input.selectedFindings?.map(f => f.label).join(', ') || 'None'}`
-    ).join('\n') || 'None';
-  
-    const prescriptionSummary = prescriptionInputs.map((input, index) => {
-      const times = ['M', 'A', 'E', 'N'].map(time => input[time.toLowerCase()] ? time : '').filter(Boolean).join(' ');
-      return `${index + 1}. ${input.selectedPrescription?.map(p => p.label).join(', ') || 'None'} - Dosage: ${input.dosage || 'N/A'} - ${times} - Duration: ${input.durationNumber || 'N/A'} ${input.duration || ''}`;
-    }).join('\n') || 'None';
-  
-    const plans = [
-      `Plan1: ${planDetails.plan1 || 'None'}`,
-      `Plan2: ${planDetails.plan2 || 'None'}`,
-      `Plan3: ${planDetails.plan3 || 'None'}`
-    ].join('\n');
-  
-    const tests = `Tests: ${selectedTests.map(test => test.label).join(', ') || 'None'}`;
-  
-    return (
-      <SummaryDetailsContainer>
-        <SummaryItem><strong>Diagnosis:</strong><br /> {diagnosis}</SummaryItem>
-        <SummaryItem><strong>Complaints:</strong><br /> {complaints}</SummaryItem>
-        <SummaryItem><strong>Findings:</strong><br /> {findings}</SummaryItem>
-        <SummaryItem><strong>Prescription:</strong><br /> {prescriptionSummary}</SummaryItem>
-        <SummaryItem><strong>Plans:</strong><br /> {plans}</SummaryItem>
-        <SummaryItem><strong>Tests:</strong><br /> {tests}</SummaryItem>
-      </SummaryDetailsContainer>
-    );
-  };
-  
-  
-    
-  
+const getSummaryDetails = () => {
+  const diagnosis = diagnosisInputs.map((input, index) =>
+    `${index + 1}. ${input.selectedDiagnosis?.map(d => d.label).join(', ') || 'None'}`
+  ).join('\n') || 'None';
 
+  const complaints = complaintsInputs.map((input, index) =>
+    `${index + 1}. ${input.selectedComplaints?.map(c => c.label).join(', ') || 'None'}`
+  ).join('\n') || 'None';
+
+  const findings = findingsInputs.map((input, index) =>
+    `${index + 1}. ${input.selectedFindings?.map(f => f.label).join(', ') || 'None'}`
+  ).join('\n') || 'None';
+
+  const prescriptionSummary = prescriptionInputs.map((input, index) => {
+    const times = ['M', 'A', 'E', 'N'].map(time => input[time.toLowerCase()] ? time : '').filter(Boolean).join(' ');
+    return {
+      index: index + 1,
+      name: input.selectedPrescription?.map(p => p.label).join(', ') || 'None',
+      dosage: input.dosage || 'N/A',
+      times,
+      duration: `${input.durationNumber || 'N/A'} ${input.duration || ''}`
+    };
+  });
+
+  const plans = [
+    `Plan1: ${planDetails.plan1 || 'None'}`,
+    `Plan2: ${planDetails.plan2 || 'None'}`,
+    `Plan3: ${planDetails.plan3 || 'None'}`
+  ].join('\n');
+
+  const procedures = procedureRows.map((row, index) =>
+    `${index + 1}. ${row.value}`
+  ).join('\n') || 'None';
+
+  const tests = [
+    "CBC (Hb, TC, DC, PLT, RBC, PCV)",
+    "Platelet count",
+    "Absolute Neutrophil count",
+    "Reticulocyte count"
+  ];
+
+  const currentDate = new Date().toLocaleDateString('en-GB', {
+    day: '2-digit',
+    month: 'short',
+    year: 'numeric',
+  });
+
+
+  return (
+    <SummaryDetailsContainer>
+      <SummaryTitle>Summary</SummaryTitle>
+
+      <PatientDetailsRow>
+        <PatientDetailsColumn>
+          <div><strong>NAME:</strong> {appointment.patientName}</div>
+          {/* <div><strong>AGE:</strong> {appointment.dateOfBirth}</div> */}
+          <div><strong>SEX:</strong> {appointment.gender}</div>
+        </PatientDetailsColumn>
+        <PatientDetailsColumn>
+          <div><strong>MOBILE:</strong> {appointment.mobileNumber}</div>
+          <div><strong>DATE:</strong> {currentDate}</div>
+          {/* <div><strong>TIME:</strong> {patientDetails.time}</div> */}
+        </PatientDetailsColumn>
+      </PatientDetailsRow>
+
+      <Divider />
+
+      <SummaryItemTitle>Diagnosis</SummaryItemTitle>
+      <SummaryTable>
+        <tbody>
+          {diagnosisInputs.map((input, index) => (
+            <tr key={index}>
+              <td>{index + 1}.</td>
+              <td>{input.selectedDiagnosis?.map(d => d.label).join(', ') || 'None'}</td>
+            </tr>
+          ))}
+        </tbody>
+      </SummaryTable>
+
+      <SummaryItemTitle>Complaints</SummaryItemTitle>
+      <SummaryTable>
+        <tbody>
+          {complaintsInputs.map((input, index) => (
+            <tr key={index}>
+              <td>{index + 1}.</td>
+              <td>{input.selectedComplaints?.map(c => c.label).join(', ') || 'None'}</td>
+            </tr>
+          ))}
+        </tbody>
+      </SummaryTable>
+
+      <SummaryItemTitle>Findings</SummaryItemTitle>
+      <SummaryTable>
+        <tbody>
+          {findingsInputs.map((input, index) => (
+            <tr key={index}>
+              <td>{index + 1}.</td>
+              <td>{input.selectedFindings?.map(f => f.label).join(', ') || 'None'}</td>
+            </tr>
+          ))}
+        </tbody>
+      </SummaryTable>
+
+      <SummaryItemTitle>Prescription</SummaryItemTitle>
+      <SummaryTable>
+        <thead>
+          <tr>
+            <th>Index</th>
+            <th>Medicine Name</th>
+            <th>Dosage</th>
+            <th>Times</th>
+            <th>Duration</th>
+          </tr>
+        </thead>
+        <tbody>
+          {prescriptionSummary.map((input, index) => (
+            <tr key={index}>
+              <td>{input.index}</td>
+              <td>{input.name}</td>
+              <td>{input.dosage}</td>
+              <td>{input.times}</td>
+              <td>{input.duration}</td>
+            </tr>
+          ))}
+        </tbody>
+      </SummaryTable>
+
+      <SummaryItemTitle>Plans</SummaryItemTitle>
+      <SummaryTable>
+        <tbody>
+          {['Plan1', 'Plan2', 'Plan3'].map((plan, index) => (
+            <tr key={index}>
+              <td>{plan}</td>
+              <td>{planDetails[plan.toLowerCase()] || 'None'}</td>
+            </tr>
+          ))}
+        </tbody>
+      </SummaryTable>
+
+      <SummaryItemTitle>Tests</SummaryItemTitle>
+      <SummaryTable>
+        <tbody>
+          {tests.map((test, index) => (
+            <tr key={index}>
+              <td>{index + 1}.</td>
+              <td>{test}</td>
+            </tr>
+          ))}
+        </tbody>
+      </SummaryTable>
+
+      <SummaryItemTitle>Procedures</SummaryItemTitle>
+      <SummaryTable>
+        <tbody>
+          {procedureRows.map((row, index) => (
+            <tr key={index}>
+              <td>{index + 1}.</td>
+              <td>{row.value}</td>
+            </tr>
+          ))}
+        </tbody>
+      </SummaryTable>
+    </SummaryDetailsContainer>
+  );
+};
+
+  
   if (!appointment) {
     return <div>No appointment data available.</div>;
   }
 
   const transformList = list => list.map(item => ({ label: item }));
 
-  return (
+ return (
     <div>
-      <PatientDetailsContainer>
-        <ProfileImage src={appointment.gender === 'Male' ? male : female} alt="Profile" />
-        <PatientName className='mt-1'>Name: {appointment.patientName}</PatientName>
-        <PatientText className='mt-1'>Phone: {appointment.mobileNumber}</PatientText>
-        <PatientText className='mt-1'>Height:</PatientText>
-        <PatientText className='mt-1'>Weight:</PatientText>
-        <PatientText className='mt-1'>Pulse of Rate:</PatientText>
-        <PatientText className='mt-1'>BP:</PatientText>
-        <PatientText className='mt-1'>Purpose Of Visit: {appointment.purposeOfVisit}</PatientText>
-      </PatientDetailsContainer>
+
       <br />
+      <RightContent>
 
       <Tab.Container defaultActiveKey="consulting-room">
         <Nav variant="pills" style={{ justifyContent: 'center' }}>
@@ -312,94 +535,99 @@ const PrescriptionDetails = () => {
           <Tab.Pane eventKey="consulting-room">
             <br />
             <Col>
-            <center>
-              <DiagnosisContainer>
-                {diagnosisInputs.map((input, index) => (
-                 
-                  <Row className="justify-content-center mb-3" key={index}>
-                    <CenteredFormGroup as={Col} md="4" controlId={`diagnosis-${index}`}>
-                      <Form.Label>Diagnosis</Form.Label>
-                      <FlexContainer>
-                        <BsPatchPlusFill size={24} onClick={() => handleAddInput(setDiagnosisInputs)} />
-                        <Typeahead className='ms-2'
-                          id={`diagnosis-typeahead-${index}`}
-                          labelKey="label"
-                          onChange={selected => {
-                            const newInputs = [...diagnosisInputs];
-                            newInputs[index] = { selectedDiagnosis: selected };
-                            setDiagnosisInputs(newInputs);
-                          }}
-                          options={transformList(diagnosisList)}
-                          placeholder="Select Diagnosis"
-                          selected={Array.isArray(input.selectedDiagnosis) ? input.selectedDiagnosis : []}
-                        />
-                        <MdDelete size={24} onClick={() => handleDeleteInput(index, setDiagnosisInputs, diagnosisInputs)} />
-                      </FlexContainer>
-                    </CenteredFormGroup>
-                  </Row>
-                ))}
-              </DiagnosisContainer>
-            </center>
-            <br />
-            <center>
-              <ComplaintsContainer>
-                {complaintsInputs.map((input, index) => (
-                  <Row className="justify-content-center mb-3" key={index}>
-                    <CenteredFormGroup as={Col} md="4" controlId={`complaints-${index}`}>
-                      <Form.Label>Complaints</Form.Label>
-                      <FlexContainer>
-                        <BsPatchPlusFill size={24} onClick={() => handleAddInput(setComplaintsInputs)} />
-                        <Typeahead className='ms-2'
-                          id={`complaints-typeahead-${index}`}
-                          labelKey="label"
-                          onChange={selected => {
-                            const newInputs = [...complaintsInputs];
-                            newInputs[index] = { selectedComplaints: selected };
-                            setComplaintsInputs(newInputs);
-                          }}
-                          options={transformList(patientComplaints)}
-                          placeholder="Select Complaints"
-                          selected={Array.isArray(input.selectedComplaints) ? input.selectedComplaints : []}
-                        />
-                        <MdDelete size={24} onClick={() => handleDeleteInput(index, setComplaintsInputs, complaintsInputs)} />
-                      </FlexContainer>
-                    </CenteredFormGroup>
-                  </Row>
-                  
-                ))}
-              </ComplaintsContainer>
-              
-            </center>
-            </Col>
-            
-            <br />
-            <center>
-              <FindingsContainer>
-                {findingsInputs.map((input, index) => (
-                  <Row className="justify-content-center mb-3" key={index}>
-                    <CenteredFormGroup as={Col} md="4" controlId={`findings-${index}`}>
-                      <Form.Label>Findings</Form.Label>
-                      <FlexContainer>
-                        <BsPatchPlusFill size={24} onClick={() => handleAddInput(setFindingsInputs)} />
-                        <Typeahead className='ms-2'
-                          id={`findings-typeahead-${index}`}
-                          labelKey="label"
-                          onChange={selected => {
-                            const newInputs = [...findingsInputs];
-                            newInputs[index] = { selectedFindings: selected };
-                            setFindingsInputs(newInputs);
-                          }}
-                          options={transformList(findingsList)}
-                          placeholder="Select Findings"
-                          selected={Array.isArray(input.selectedFindings) ? input.selectedFindings : []}
-                        />
-                        <MdDelete size={24} onClick={() => handleDeleteInput(index, setFindingsInputs, findingsInputs)} />
-                      </FlexContainer>
-                    </CenteredFormGroup>
-                  </Row>
-                ))}
-              </FindingsContainer>
-            </center>
+            <PatientDetailsContainer>
+      <ProfileImage src={appointment.gender === 'Male' ? male : female} alt="Profile" />
+      <PatientName className='mt-1'>Name: {appointment.patientName}</PatientName>
+      <PatientText className='mt-1'>Phone: {appointment.mobileNumber}</PatientText>
+      <PatientText className='mt-1'>Height: {appointment.height}</PatientText>
+      <PatientText className='mt-1'>Weight: {appointment.weight}</PatientText>
+      <PatientText className='mt-1'>Pulse Rate: {appointment.pulseRate}</PatientText>
+      <PatientText className='mt-1'>BP: {appointment.bp}</PatientText>
+      <PatientText className='mt-1'>Purpose Of Visit: {appointment.purposeOfVisit}</PatientText>
+    </PatientDetailsContainer>
+      <ContainerRow>
+        <DiagnosisContainer>
+          {diagnosisInputs.map((input, index) => (
+            <Row className="justify-content-center mb-3" key={index}>
+              <CenteredFormGroup as={Col} md="4" controlId={`diagnosis-${index}`}>
+                <Form.Label>Diagnosis</Form.Label>
+                <FlexContainer>
+                  <BsPatchPlusFill size={24} onClick={() => handleAddInput(setDiagnosisInputs)} />
+                  <Typeahead
+                    className='ms-2'
+                    id={`diagnosis-typeahead-${index}`}
+                    labelKey="label"
+                    onChange={selected => {
+                      const newInputs = [...diagnosisInputs];
+                      newInputs[index] = { selectedDiagnosis: selected };
+                      setDiagnosisInputs(newInputs);
+                    }}
+                    options={transformList(diagnosisList)}
+                    placeholder="Select Diagnosis"
+                    selected={Array.isArray(input.selectedDiagnosis) ? input.selectedDiagnosis : []}
+                  />
+                  <MdDelete size={24} onClick={() => handleDeleteInput(index, setDiagnosisInputs, diagnosisInputs)} />
+                </FlexContainer>
+              </CenteredFormGroup>
+            </Row>
+          ))}
+        </DiagnosisContainer>
+
+        <ComplaintsContainer>
+          {complaintsInputs.map((input, index) => (
+            <Row className="justify-content-center mb-3" key={index}>
+              <CenteredFormGroup as={Col} md="4" controlId={`complaints-${index}`}>
+                <Form.Label>Complaints</Form.Label>
+                <FlexContainer>
+                  <BsPatchPlusFill size={24} onClick={() => handleAddInput(setComplaintsInputs)} />
+                  <Typeahead
+                    className='ms-2'
+                    id={`complaints-typeahead-${index}`}
+                    labelKey="label"
+                    onChange={selected => {
+                      const newInputs = [...complaintsInputs];
+                      newInputs[index] = { selectedComplaints: selected };
+                      setComplaintsInputs(newInputs);
+                    }}
+                    options={transformList(patientComplaints)}
+                    placeholder="Select Complaints"
+                    selected={Array.isArray(input.selectedComplaints) ? input.selectedComplaints : []}
+                  />
+                  <MdDelete size={24} onClick={() => handleDeleteInput(index, setComplaintsInputs, complaintsInputs)} />
+                </FlexContainer>
+              </CenteredFormGroup>
+            </Row>
+          ))}
+        </ComplaintsContainer>
+
+        <FindingsContainer>
+          {findingsInputs.map((input, index) => (
+            <Row className="justify-content-center mb-3" key={index}>
+              <CenteredFormGroup as={Col} md="4" controlId={`findings-${index}`}>
+                <Form.Label>Findings</Form.Label>
+                <FlexContainer>
+                  <BsPatchPlusFill size={24} onClick={() => handleAddInput(setFindingsInputs)} />
+                  <Typeahead
+                    className='ms-2'
+                    id={`findings-typeahead-${index}`}
+                    labelKey="label"
+                    onChange={selected => {
+                      const newInputs = [...findingsInputs];
+                      newInputs[index] = { selectedFindings: selected };
+                      setFindingsInputs(newInputs);
+                    }}
+                    options={transformList(findingsList)}
+                    placeholder="Select Findings"
+                    selected={Array.isArray(input.selectedFindings) ? input.selectedFindings : []}
+                  />
+                  <MdDelete size={24} onClick={() => handleDeleteInput(index, setFindingsInputs, findingsInputs)} />
+                </FlexContainer>
+              </CenteredFormGroup>
+            </Row>
+          ))}
+        </FindingsContainer>
+      </ContainerRow>
+    </Col>
             <br />
             <center>
             <PrescriptionContainer>
@@ -580,6 +808,7 @@ const PrescriptionDetails = () => {
           </Tab.Pane>
         </Tab.Content>
       </Tab.Container>
+      </RightContent>
     </div>
   );
 };

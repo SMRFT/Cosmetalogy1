@@ -15,6 +15,7 @@ import BookedAppointments from './components/BookedAppointments';
 import Prescription from './components/Prescription';
 import Report from './components/Report';
 import SignOut from './components/SignOut';
+import { GlobalStyle} from './styles';
 
 function App() {
   const location = useLocation();
@@ -28,48 +29,51 @@ function App() {
   const shouldShowSignOut = isLoggedIn && !['/', '/PharmacistLogin', '/DoctorLogin', '/Doctor/*','/ReceptionistLogin'].includes(location.pathname);
 
   return (
-    <div className="App">
-      <div className="logo-container">
-        <img src={Logo} alt="Shanmuga Hospital Logo" className="logo" />
-        {shouldShowSignOut && <SignOut />}
-      </div>
-      <div className="main-content">
-        <Routes>
-          <Route path="/" element={<HomePage />} />
-          <Route path="/Register" element={<Register />} />
-          <Route path="/PharmacistLogin" element={<PharmacistLogin setUserRole={setUserRole} />} />
-          <Route path="/DoctorLogin" element={<DoctorLogin setUserRole={setUserRole} />} />
-          <Route path="/ReceptionistLogin" element={<ReceptionistLogin setUserRole={setUserRole} />} />
-          <Route path="/Pharmacy" element={<Pharmacy />} />
-          <Route path="/Appointment" element={<Appointment />} />
-          <Route path="/BookedAppointments" element={<BookedAppointments />} />
-          <Route path="/Prescription" element={<Prescription />} />
-          {/* <Route path="/Report" element={<Report />} /> */}
+    <>
+      <GlobalStyle />
 
-          {/* Doctor routes */}
-          <Route path="/Doctor/*" element={isLoggedIn ? <Doctor appointments={[]} /> : <Navigate to="/" />} />
+        <div className="logo-container">
+          <img src={Logo} alt="Shanmuga Hospital Logo" className="logo" />
+          {shouldShowSignOut && <SignOut />}
+        </div>
+        <div className="main-content">
+          <Routes>
+            <Route path="/" element={<HomePage />} />
+            <Route path="/Register" element={<Register />} />
+            <Route path="/PharmacistLogin" element={<PharmacistLogin setUserRole={setUserRole} />} />
+            <Route path="/DoctorLogin" element={<DoctorLogin setUserRole={setUserRole} />} />
+            <Route path="/ReceptionistLogin" element={<ReceptionistLogin setUserRole={setUserRole} />} />
+            <Route path="/Pharmacy" element={<Pharmacy />} />
+            <Route path="/Appointment" element={<Appointment />} />
+            <Route path="/BookedAppointments" element={<BookedAppointments />} />
+            <Route path="/Prescription" element={<Prescription />} />
+            {/* <Route path="/Report" element={<Report />} /> */}
 
-          {/* Receptionist routes */}
-          <Route path="/Reception/*" element={isLoggedIn ? <Reception /> : <Navigate to="/" />} />
+            {/* Doctor routes */}
+            <Route path="/Doctor/*" element={isLoggedIn ? <Doctor appointments={[]} /> : <Navigate to="/" />} />
 
-          {/* PatientDetails routes */}
-          <Route path="/Doctor/PatientDetails" element={<PatientDetails />} />
-          <Route path="/Doctor/Report" element={<Report />} />
-          <Route path="/Receptionist/PatientDetails" element={<PatientDetails />} />
+            {/* Receptionist routes */}
+            <Route path="/Reception/*" element={isLoggedIn ? <Reception /> : <Navigate to="/" />} />
 
-          {/* Default redirections */}
-          {isLoggedIn && (
-            <>
-              <Route path="/DoctorLogin/*" element={<Navigate to="/Doctor/PatientDetails" />} />
-              <Route path="/ReceptionistLogin/*" element={<Navigate to="/Receptionist/PatientDetails" />} />
-            </>
-          )}
+            {/* PatientDetails routes */}
+            <Route path="/Doctor/PatientDetails" element={<PatientDetails />} />
+            <Route path="/Doctor/Report" element={<Report />} />
+            <Route path="/Receptionist/PatientDetails" element={<PatientDetails />} />
 
-          {/* Redirect all unknown routes to home */}
-          <Route path="*" element={<Navigate to="/" />} />
-        </Routes>
-      </div>
-    </div>
+            {/* Default redirections */}
+            {isLoggedIn && (
+              <>
+                <Route path="/DoctorLogin/*" element={<Navigate to="/Doctor/PatientDetails" />} />
+                <Route path="/ReceptionistLogin/*" element={<Navigate to="/Receptionist/PatientDetails" />} />
+              </>
+            )}
+
+            {/* Redirect all unknown routes to home */}
+            <Route path="*" element={<Navigate to="/" />} />
+          </Routes>
+        </div>
+  
+    </>
   );
 }
 

@@ -72,13 +72,15 @@ class Appointment(models.Model):
         return self.patientName
 
 class SummaryDetail(models.Model):
+    patient_name = models.CharField(max_length=100)  # Add this line
     diagnosis = models.TextField(blank=True)
     complaints = models.TextField(blank=True)
     findings = models.TextField(blank=True)
     prescription = models.TextField(blank=True)
     plans = models.TextField(blank=True)
     tests = models.TextField(blank=True)
-    date = models.DateField(auto_now_add=True) # Automatically set the field to now every time the object is saved
+    procedures = models.TextField(blank=True)
+    date = models.DateField(auto_now_add=True)  # Automatically set the field to the current date when the object is created
 
     def __str__(self):
         return self.diagnosis
