@@ -12,6 +12,8 @@ import { BsPatchPlusFill } from "react-icons/bs";
 import { MdDelete } from "react-icons/md";
 import axios from 'axios';
 import { createGlobalStyle } from 'styled-components';
+import { FaCalendarAlt } from 'react-icons/fa';
+import DatePicker from 'react-datepicker';
 export const GlobalStyle = createGlobalStyle`
   body {
     background-color: #e8f5e9; /* Light green background */
@@ -19,16 +21,14 @@ export const GlobalStyle = createGlobalStyle`
     font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
   }
 `;
-
 export const AppContainer = styled.div`
   display: flex;
   flex-direction: column;
   align-items: center;
   padding: 20px;
-  background-color: #e8f5e9; /* Light green background */
-  min-height: 100vh; /* Ensure it covers the full height */
+  background-color: ${({ theme }) => theme.bodyBackgroundColor};
+  min-height: 100vh;
 `;
-
 export const SectionTitle = styled.h4`
   margin-top: 20px;
   text-align: center;
@@ -38,16 +38,17 @@ export const PatientDetailsContainer = styled.div`
   display: flex;
   flex-direction: column;
   align-items: center;
-  background-color: #e8f5e9; /* Light green background */
+  background-color: #fff; // White background
   padding: 20px;
-  width: 300px; /* Set a fixed width for the container */
+  width: 300px;
   height: auto;
   margin: 0;
   position: absolute;
   top: 3;
   left: 0;
   bottom: 3;
-  margin-bottom: 100px; /* Adjust margin bottom as needed */
+  margin-bottom: 100px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
 `;
 
 export const ProfileImage = styled.img`
@@ -74,10 +75,10 @@ export const PatientText = styled.p`
 `;
 
 export const RightContent = styled.div`
-  margin-left: 320px; /* Make space for the fixed left container */
+  margin-left: 320px;
   padding: 20px;
-  overflow-y: auto; /* Allow vertical scrolling */
-  height: 100vh; /* Full height of viewport */
+  overflow-y: auto;
+  height: 100vh;
 `;
 
 export const CenteredFormGroup = styled(Form.Group)`
@@ -87,13 +88,24 @@ export const CenteredFormGroup = styled(Form.Group)`
   width: 100%;
 `;
 
+export const SummaryContainer = styled.div`
+  margin-top: 20px;
+  padding: 20px;
+  background-color: #f0f0f0; // Light gray background
+  border-radius: 10px;
+  width: 50%;
+  height: auto;
+  margin-left: auto;
+  margin-right: auto;
+`;
+
 const SummaryDetailsContainer = styled.div`
   display: flex;
   flex-direction: column;
   align-items: flex-start;
   margin-top: 20px;
   padding: 20px;
-  background-color: #ffffff;
+  background-color: #fff; // White background
   border-radius: 10px;
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
   width: 100%;
@@ -105,6 +117,7 @@ const SummaryTitle = styled.h3`
   text-align: center;
   width: 100%;
   margin-bottom: 20px;
+  color: #333; // Dark gray color
 `;
 
 const SummaryTable = styled.table`
@@ -119,17 +132,18 @@ const SummaryTable = styled.table`
   }
 
   th {
-    background-color: #f2f2f2;
+    background-color: #f0f0f0; // Light gray background for headers
   }
 
   tr:nth-child(even) {
-    background-color: #f9f9f9;
+    background-color: #fafafa; // Light gray for alternating rows
   }
 `;
 
 const SummaryItemTitle = styled.h4`
   margin-top: 20px;
   margin-bottom: 10px;
+  color: #666; // Dark gray color
 `;
 
 const PatientDetailsRow = styled.div`
@@ -159,11 +173,65 @@ export const ContainerRow = styled.div`
   margin-top: 20px;
 `;
 
+const NextVisitonContainer = styled.div`
+  margin-top: 20px;
+  padding: 20px;
+  background-color: #f0f0f0; // Light gray background
+  border-radius: 10px;
+  width: 70%;
+  margin-left: auto;
+  margin-right: auto;
+`;
+
+const DateDisplay = styled.div`
+  font-size: 16px;
+  color: #333;
+`;
+
+const CalendarIcon = styled(FaCalendarAlt)`
+  font-size: 24px;
+  cursor: pointer;
+  color: #007bff;
+`;
+
+const ImageContainer = styled.div`
+  flex: 1;
+  margin-right: 10px;
+  padding: 20px;
+  // background-color: #f0f0f0; // Light gray background
+  border-radius: 10px;
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: flex-start;
+`;
+
+const UploadedImage = styled.img`
+  width: 80px;
+  height: 80px;
+  margin: 5px;
+  object-fit: cover;
+`;
+const SectionTitle2 = styled.h4`
+  margin-top: 20px;
+  margin-bottom: 10px;
+  color: #666; // Dark gray color
+`;
+
+const UploadIcon = styled.i`
+  font-size: 3rem;
+  color: #757575; // Gray color
+`;
+
+const UploadText = styled.p`
+  font-size: 1rem;
+  color: #757575; // Gray color
+`;
+
 export const DiagnosisContainer = styled.div`
   flex: 1;
   margin-right: 10px;
   padding: 20px;
-  background-color: #c8e6c9; /* Medium green background */
+  background-color: #f0f0f0; // Light gray background
   border-radius: 10px;
 `;
 
@@ -171,21 +239,21 @@ export const ComplaintsContainer = styled.div`
   flex: 1;
   margin-right: 10px;
   padding: 20px;
-  background-color: #c8e6c9; /* Medium green background */
+  background-color: #f0f0f0; // Light gray background
   border-radius: 10px;
 `;
 
 export const FindingsContainer = styled.div`
   flex: 1;
   padding: 20px;
-  background-color: #c8e6c9; /* Medium green background */
+  background-color: #f0f0f0; // Light gray background
   border-radius: 10px;
 `;
 
 export const PrescriptionContainer = styled.div`
   margin-top: 50px;
   padding: 20px;
-  background-color: #a5d6a7; /* Darker green background */
+  background-color: #dcdcdc; // Darker gray background
   border-radius: 10px;
   width: 100%;
   height: 30%;
@@ -199,7 +267,7 @@ export const FlexContainer = styled.div`
 export const PlanContainer = styled.div`
   margin-top: 20px;
   padding: 20px;
-  background-color: #c8e6c9; /* Medium green background */
+  background-color: #f0f0f0; // Light gray background
   border-radius: 10px;
   width: 70%;
   margin-left: auto;
@@ -209,7 +277,7 @@ export const PlanContainer = styled.div`
 export const ProcedureContainer = styled.div`
   margin-top: 20px;
   padding: 20px;
-  background-color: #c8e6c9; /* Medium green background */
+  background-color: #f0f0f0; // Light gray background
   border-radius: 10px;
   width: 70%;
   margin-left: auto;
@@ -219,28 +287,17 @@ export const ProcedureContainer = styled.div`
 export const TestContainer = styled.div`
   margin-top: 20px;
   padding: 20px;
-  background-color: #c8e6c9; /* Medium green background */
+  background-color: #f0f0f0; // Light gray background
   border-radius: 10px;
   width: 70%;
   margin-left: auto;
   margin-right: auto;
 `;
 
-export const SummaryContainer = styled.div`
-  margin-top: 20px;
-  padding: 20px;
-  background-color: #e0f2f1; /* Lightest green background */
-  border-radius: 10px;
-  width: 50%;
-  height: auto;
-  margin-left: auto;
-  margin-right: auto;
-`;
 
 const PrescriptionDetails = () => {
   const location = useLocation();
   const { appointment } = location.state || {};
-
   const [diagnosisInputs, setDiagnosisInputs] = useState([{}]);
   const [complaintsInputs, setComplaintsInputs] = useState([{}]);
   const [findingsInputs, setFindingsInputs] = useState([{}]);
@@ -248,7 +305,7 @@ const PrescriptionDetails = () => {
     { selectedPrescription: [], dosage: '', durationNumber: '', duration: '', m: false, a: false, e: false, n: false }
   ]);
   
-
+  
   const [procedureRows, setProcedureRows] = useState([
     { id: 1, value: '' }
   ]);
@@ -258,26 +315,55 @@ const PrescriptionDetails = () => {
     plan2: '',
     plan3: ''
   });
+  const [uploadedImages, setUploadedImages] = useState([]);
   
   const [selectedTests, setSelectedTests] = useState([]);
+  // const [medicineOptions, setMedicineOptions] = useState([]); // State to hold medicine_name options
+  const [selectedPrescription, setSelectedPrescription] = useState('');
+  const [qty, setQty] = useState('');
+  const [price, setPrice] = useState('');
+  const [gst, setGst] = useState('');
+  const [total, setTotal] = useState('');
+  const [selectedDate, setSelectedDate] = useState(null);
 
+  const handleDateChange = (date) => {
+    setSelectedDate(date);
+  };
 
+  const formatDate = (date) => {
+    const day = date.getDate().toString().padStart(2, '0');
+    const month = (date.getMonth() + 1).toString().padStart(2, '0');
+    const year = date.getFullYear();
+    return `${day}/${month}/${year}`;
+  };
+      // Function to handle image upload
+  const handleImageUpload = (e) => {
+    const files = Array.from(e.target.files);
+    const uploaded = files.map((file) => ({
+      src: URL.createObjectURL(file),
+      alt: file.name,
+    }));
+    setUploadedImages([...uploadedImages, ...uploaded]);
+  };
 
-  const [medicineOptions, setMedicineOptions] = useState([]); // State to hold medicine_name options
+    const handleGenerateClick = () => {
+      // Handle generation logic here, if needed
+      console.log('Generate button clicked');
+    };
 
-  useEffect(() => {
-    // Fetch medicine_name options from API
-    axios.get('http://127.0.0.1:8000/pharmacy/data/')
-      .then(response => {
-        const medicineNames = response.data.map(medicine => ({
-          label: medicine.medicine_name
-        }));
-        setMedicineOptions(medicineNames);
-      })
-      .catch(error => {
-        console.error('Error fetching medicine names:', error);
-      });
-  }, []); // Empty dependency array ensures this effect runs once on component mount
+    useEffect(() => {
+      // Fetch medicine_name options from API
+      axios.get('http://127.0.0.1:8000/pharmacy/data/')
+        .then(response => {
+          const medicineNames = response.data.map(medicine => ({
+            label: medicine.medicine_name
+          }));
+          setMedicineOptions(medicineNames);
+        })
+        .catch(error => {
+          console.error('Error fetching medicine names:', error);
+        });
+    }, []); // Empty dependency array ensures this effect runs once on component mount
   
   const handleAddRow = () => {
     const newRow = { id: procedureRows.length + 1, value: '' };
@@ -311,10 +397,43 @@ const PrescriptionDetails = () => {
     setInputs(inputs.filter((_, i) => i !== index));
   };
 
+ 
+  const [medicineOptions, setMedicineOptions] = useState([]);
+  const [billInputs, setBillInputs] = useState([
+    { qty: '', price: '', gst: '', total: '' }
+  ]);
+
   const handlePrescriptionChange = (index, key, value) => {
     const newInputs = [...prescriptionInputs];
     newInputs[index][key] = value;
     setPrescriptionInputs(newInputs);
+  
+    // Ensure billInputs array has the same length as prescriptionInputs
+    if (billInputs.length < prescriptionInputs.length) {
+      setBillInputs([...billInputs, { qty: '', price: '', gst: '', total: '' }]);
+    }
+  };
+
+  const handlePrescriptionAddInput = () => {
+    setPrescriptionInputs([...prescriptionInputs, { selectedPrescription: [], dosage: '', durationNumber: '', duration: '', m: false, a: false, e: false, n: false }]);
+  };
+  
+  const handlePrescriptionDeleteInput = (index) => {
+    const newInputs = prescriptionInputs.filter((_, i) => i !== index);
+    setPrescriptionInputs(newInputs);
+  };
+  
+
+  const handleQtyOrPriceChange = (index, key, value) => {
+    const newBillInputs = [...billInputs];
+    newBillInputs[index] = { ...newBillInputs[index], [key]: value };
+
+    // Calculate the total based on qty and price
+    const qty = parseFloat(newBillInputs[index].qty) || 0;
+    const price = parseFloat(newBillInputs[index].price) || 0;
+    newBillInputs[index].total = (qty * price).toFixed(2); // Fix to 2 decimal places
+
+    setBillInputs(newBillInputs);
   };
   
   const handleSubmit = async () => {
@@ -374,19 +493,11 @@ const getSummaryDetails = () => {
     `${index + 1}. ${row.value}`
   ).join('\n') || 'None';
 
-  const tests = [
-    "CBC (Hb, TC, DC, PLT, RBC, PCV)",
-    "Platelet count",
-    "Absolute Neutrophil count",
-    "Reticulocyte count"
-  ];
-
   const currentDate = new Date().toLocaleDateString('en-GB', {
     day: '2-digit',
     month: 'short',
     year: 'numeric',
   });
-
 
   return (
     <SummaryDetailsContainer>
@@ -418,7 +529,21 @@ const getSummaryDetails = () => {
           ))}
         </tbody>
       </SummaryTable>
-
+      <Divider />
+      <SummaryItemTitle>Images</SummaryItemTitle>
+      <ImageContainer>
+      {uploadedImages.map((image, index) => (
+        <Row key={index}>
+          <Col>
+            <UploadedImage src={image.src} alt={image.alt} />
+          </Col>
+        </Row>
+      ))}
+      {uploadedImages.length === 0 && (
+        <UploadText></UploadText>
+      )}
+    </ImageContainer>
+    <Divider />
       <SummaryItemTitle>Complaints</SummaryItemTitle>
       <SummaryTable>
         <tbody>
@@ -430,7 +555,7 @@ const getSummaryDetails = () => {
           ))}
         </tbody>
       </SummaryTable>
-
+      <Divider />
       <SummaryItemTitle>Findings</SummaryItemTitle>
       <SummaryTable>
         <tbody>
@@ -442,7 +567,7 @@ const getSummaryDetails = () => {
           ))}
         </tbody>
       </SummaryTable>
-
+      <Divider />
       <SummaryItemTitle>Prescription</SummaryItemTitle>
       <SummaryTable>
         <thead>
@@ -466,7 +591,7 @@ const getSummaryDetails = () => {
           ))}
         </tbody>
       </SummaryTable>
-
+      <Divider />
       <SummaryItemTitle>Plans</SummaryItemTitle>
       <SummaryTable>
         <tbody>
@@ -478,19 +603,19 @@ const getSummaryDetails = () => {
           ))}
         </tbody>
       </SummaryTable>
-
+      <Divider />
       <SummaryItemTitle>Tests</SummaryItemTitle>
       <SummaryTable>
         <tbody>
-          {tests.map((test, index) => (
+          {selectedTests.map((test, index) => (
             <tr key={index}>
               <td>{index + 1}.</td>
-              <td>{test}</td>
+              <td>{test.label}</td>
             </tr>
           ))}
         </tbody>
       </SummaryTable>
-
+      <Divider />
       <SummaryItemTitle>Procedures</SummaryItemTitle>
       <SummaryTable>
         <tbody>
@@ -505,7 +630,7 @@ const getSummaryDetails = () => {
     </SummaryDetailsContainer>
   );
 };
-
+  
   
   if (!appointment) {
     return <div>No appointment data available.</div>;
@@ -572,8 +697,39 @@ const getSummaryDetails = () => {
             </Row>
           ))}
         </DiagnosisContainer>
-
-        <ComplaintsContainer>
+        <ImageContainer>
+        {/* <SectionTitle2>Images</SectionTitle2> */}
+      <label htmlFor="upload-button" style={{ cursor: 'pointer' }}>
+        <BsPatchPlusFill style={{ fontSize: '5rem', color: '#757575' }} />
+      </label>
+      
+      <Form.Group controlId="formFileMultiple" className="mb-3">
+        <label htmlFor="upload-button" style={{ cursor: 'pointer' }}>
+        </label>
+        <input
+          id="upload-button"
+          type="file"
+          multiple
+          onChange={handleImageUpload}
+          style={{ display: 'none' }}
+        />
+      </Form.Group>
+      
+      {uploadedImages.map((image, index) => (
+        <Row key={index}>
+          <Col>
+            <UploadedImage src={image.src} alt={image.alt} />
+          </Col>
+        </Row>
+      ))}
+      {uploadedImages.length === 0 && (
+        <UploadText></UploadText>
+      )}
+    </ImageContainer>
+      </ContainerRow>
+    </Col>
+    <ContainerRow>
+    <ComplaintsContainer>
           {complaintsInputs.map((input, index) => (
             <Row className="justify-content-center mb-3" key={index}>
               <CenteredFormGroup as={Col} md="4" controlId={`complaints-${index}`}>
@@ -626,8 +782,7 @@ const getSummaryDetails = () => {
             </Row>
           ))}
         </FindingsContainer>
-      </ContainerRow>
-    </Col>
+        </ContainerRow>
             <br />
             <center>
             <PrescriptionContainer>
@@ -792,6 +947,21 @@ const getSummaryDetails = () => {
               ))}
               <button onClick={handleAddRow}>Add Procedure</button>
             </ProcedureContainer>
+            <NextVisitonContainer>
+        <SectionTitle>Next Visit</SectionTitle>
+        <DatePicker
+          selected={selectedDate}
+          onChange={handleDateChange}
+          customInput={<CalendarIcon />}
+          popperPlacement="bottom-end"
+          dateFormat="dd/MM/yyyy"
+        />
+      
+        <DateDisplay>
+          <br/>
+          {selectedDate ? `Next Visit on: ${formatDate(selectedDate)}` : 'Next Visit on: Select a date'}
+        </DateDisplay>
+      </NextVisitonContainer>
           </Tab.Pane>
 
           <Tab.Pane eventKey="summary">
